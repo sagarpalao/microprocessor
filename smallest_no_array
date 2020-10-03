@@ -1,0 +1,60 @@
+DATA SEGMENT
+        MSG1 DB 0AH,0DH,"Enter a number: $"
+        MSG2 DB 0AH,0DH,"Smallest number is: $"
+        LARGEST DW ?
+DATA ENDS
+
+CODE SEGMENT
+        ASSUME CS:CODE,DS:DATA
+
+        START:
+                MOV AX,DATA
+                MOV DS,AX
+
+                MOV SI,6000H
+                MOV CL,03H
+
+                MOV AH,09H
+                LEA DX,MSG1
+                INT 21H
+
+                MOV AH,01H
+                INT 21H
+                MOV [SI],AL
+                DEC CL
+                JZ L4
+
+                L1:     MOV AH,09H
+                        LEA DX,MSG1
+                        INT 21H
+
+                L2:
+                        MOV AH,01H
+                        INT 21H
+                        CMP AL,BYTE PTR[SI]
+                        JBE L3
+                        DEC CL
+                        JNZ L1
+                        JMP L4
+
+                L3:
+                        MOV [SI],AL
+                        DEC CL
+                        JNZ L1
+                        JMP L4
+
+                L4:
+                        LEA DX,MSG2
+                        MOV AH,09H
+                        INT 21H
+                        MOV BX,[SI]
+                        MOV DX,BX
+                        MOV AH,02H
+                        INT 21H
+
+                        MOV AH,4CH
+                        INT 21H
+
+                CODE ENDS
+      END START
+END

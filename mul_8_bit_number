@@ -1,0 +1,22 @@
+DATA SEGMENT
+        NUM1 DB 05H
+        NUM2 DB 02H
+        RES DW ?
+DATA ENDS
+
+CODE SEGMENT
+        ASSUME DS:DATA,CS:CODE
+
+        START:
+                MOV AX,DATA
+                MOV DS,AX
+                MOV AL,NUM1
+                MOV BL,NUM2
+                MUL BL
+                MOV RES,AX
+                MOV AH,4CH
+                INT 21H
+
+        CODE ENDS
+        END START
+END

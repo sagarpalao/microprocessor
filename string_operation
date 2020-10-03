@@ -1,0 +1,106 @@
+DATA SEGMENT
+        MSG1 DB 10,13, 'ENTER STRING $'
+        MSG2 DB 10,13, 'ENTERED STRING: $'
+        MSG3 DB 10,13, '$'
+        STRING DB 80
+DATA ENDS
+
+CODE SEGMENT
+        ASSUME CS:CODE,DS:DATA
+        START:
+                MOV AX,DATA
+                MOV DS,AX
+
+                MOV AH,09H
+                LEA DX,MSG1
+                INT 21H
+
+                MOV AH,09H
+                LEA DX,MSG3
+                INT 21H
+
+                MOV AH,0AH
+                LEA DX,STRING
+                INT 21H
+
+
+                MOV AH,09H
+                LEA DX,MSG2
+                INT 21H
+
+                LEA BX,STRING
+                MOV CH,00H
+                MOV CL,STRING +1
+                MOV DI,00H
+
+                BACK:
+                        MOV DL,[BX+DI+2]
+                        MOV AH,02H
+                        INT 21H
+                        INC DI
+                        LOOP BACK
+
+                MOV AH,4CH
+                INT 21H
+
+CODE ENDS
+END START
+END
+
+GETSTR MACRO STR
+MOV AH,0AH
+LEA DX,STR
+INT 21H
+ENDM
+
+PRINTSTR MACRO STR
+MOV AH,09H
+LEA DX,STR
+INT 21H
+ENDM
+
+DATA SEGMENT
+        STR1 DB 80,80 DUP('$')
+        STR2 DB 80,80 DUP('$')
+        MSG1 DB 10,13,'FIRST STRING :$'
+        MSG2 DB 10,13,'SECOND STRING IS :$'
+        MSG3 DB 10,13,'EQUAL$'
+        MSG4 DB 10,13,'NOT EQUAL$'
+DATA ENDS
+
+CODE SEGMENT
+        ASSUME CS:CODE,DS:DATA,ES:DATA
+        START:
+                 MOV AX,DATA
+                 MOV ES,AX
+                 MOV DS,AX
+        
+                 PRINTSTR MSG1
+                 GETSTR STR1
+                 PRINTSTR MSG2
+                 GETSTR STR2
+               
+                 LEA SI,STR1+2
+                 LEA DI,STR2+2
+               
+                 MOV CL,STR1+1 ;
+                 MOV CH,00H
+        
+                 REPE CMPSB
+                 JNE NOTEQUAL
+        
+                 PRINTSTR MSG3
+                 JMP ABC
+        
+             NOTEQUAL:
+                 PRINTSTR MSG4
+        
+             ABC:      
+                 MOV AX,4C00H
+                 INT 21H
+        
+CODE ENDS
+        END START
+
+
+

@@ -1,0 +1,65 @@
+data segment
+        no1 db 31H
+        no2 db 45H
+data ends
+
+code segment
+        assume CS:code,DS:data
+                start:
+                        MOV AX,data
+                        MOV DS,AX
+                        MOV AL,no1
+                        MOV BL,NO2
+                        AND AL,BL
+                        OR AL,BL
+                        XOR AL,BL
+                        NOT AL
+                        MOV AH,4CH
+                        INT 21H
+               CODE ENDS
+        END START
+END
+
+
+DATA SEGMENT
+        NO1 DB 77H
+DATA ENDS
+
+CODE SEGMENT
+        ASSUME CS:CODE,DS:DATA
+        START:
+                MOV AX,DATA
+                MOV DS,AX
+                MOV AL,NO1
+                MOV CL,03H
+                SHL AL,CL
+                SHR AL,CL
+                SAR AL,CL
+                SAL AL,CL
+                MOV AH,4CH
+                INT 21H
+        CODE ENDS
+END START
+END
+
+DATA SEGMENT
+        NO1 DB 77H
+DATA ENDS
+
+CODE SEGMENT
+        ASSUME CS:CODE,DS:DATA
+        START:
+                MOV AX,DATA
+                MOV DS,AX
+                MOV AL,NO1
+                MOV CL,03H
+                ROR AL,CL
+                ROL AL,CL
+                RCL AL,CL
+                RCR AL,CL
+                MOV AH,4CH
+                INT 21H
+        CODE ENDS
+END START
+END
+

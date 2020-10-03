@@ -1,0 +1,59 @@
+PROMPT MACRO MSG
+	LEA DX,MSG
+	MOV AH,09H
+	INT 21H
+ENDM
+
+DATA SEGMENT
+        MSG1 DB 10,13, 'ENTER STRING $'
+        MSG2 DB 10,13, 'PALINDROME $'
+        MSG3 DB 10,13, '$'
+        MSG4 DB 10,13, 'NOT PALINDROME $'
+        STRING DB 80
+DATA ENDS
+
+CODE SEGMENT
+        ASSUME CS:CODE,DS:DATA
+        START:
+
+                MOV AX,DATA
+                MOV DS,AX
+
+                PROMPT MSG1
+                PROMPT MSG3
+
+                MOV AH,0AH
+                LEA DX,STRING
+                INT 21H
+
+                LEA BX,STRING+2
+                MOV CL,STRING+1
+                MOV CH,00H
+                MOV SI,00H
+                MOV DI,CX
+                DEC DI
+                SAR CL,01
+
+                L1:
+                        MOV AH,[BX+SI]
+                        MOV AL,[BX+DI]
+                        CMP AH,AL
+                        JNZ L2
+                        DEC DI
+                        INC SI
+                        DEC CX
+                        JNZ L1
+
+                        PROMPT MSG2
+                        JMP L3
+
+                L2:
+                        PROMPT MSG4
+
+                L3:        
+                        MOV AH,4CH
+                        INT 21H
+
+CODE ENDS
+END START
+END

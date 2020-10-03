@@ -1,0 +1,22 @@
+DATA SEGMENT
+        DIVIDEND DW 0202H
+        DIVISOR DB 02H
+        QUOTIENT DB ?
+        REMAINDER DB ?
+DATA ENDS
+
+CODE SEGMENT
+        ASSUME CS:CODE,DS:DATA
+        START:
+                MOV AX,DATA
+                MOV DS,AX
+                MOV AX,DIVIDEND
+                MOV BL,DIVISOR
+                DIV BL
+                MOV QUOTIENT,AL
+                MOV REMAINDER,AH
+                MOV AH,4CH
+                INT 21H
+       CODE ENDS
+       END START
+END
